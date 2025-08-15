@@ -1,5 +1,7 @@
 <?php
 
+use Dom\Element;
+
 require_once(__DIR__ . "/../util/Connection.php");
 require_once(__DIR__ . "/../model/Aluno.php");
 
@@ -21,6 +23,38 @@ class AlunoDAO {
         $result = $stm->fetchAll();
 
         return $this->map($result);
+    }
+
+    public function buscarPorId($id) {
+        $sql = "SELECT a.*, 
+                    c.nome nome_curso, c.turno turno_curso 
+                FROM alunos a
+                    JOIN cursos c ON (c.id = a.id_curso)
+                WHERE a.id = ?";
+        $stm = $this->conexao->prepare($sql);
+        $stm->execute([$id]);
+        $result = $stm->fetchAll();
+
+        $alunos = $this->map($result);
+
+        if(count($alunos) > 0)
+            return $alunos[0];
+        else
+            return NULL;
+    }
+
+    public function inserir(Aluno $aluno) {
+        try {
+            $sql = "INSERT INTO alunos (nome, idade, estrangeiro, id_curso)
+                    VALUES (?, ?, ?, ?)";
+            $stm = $this->conexao->prepare($sql);
+            $stm->execute([$aluno->getNome(), $aluno->getIdade(), 
+                        $aluno->getEstrangeiro(),
+                        $aluno->getCurso()->getId()]);
+            return NULL;
+        } catch(PDOException $e) {
+            return $e;
+        }
     }
 
     private function map(array $result) {

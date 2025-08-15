@@ -10,28 +10,29 @@ class CursoDAO {
     public function __construct() {
         $this->conexao = Connection::getConnection();        
     }
-
+    
     public function listar() {
         $sql = "SELECT * FROM cursos ORDER BY nome";
         $stm = $this->conexao->prepare($sql);
         $stm->execute();
-        $result = $stm->fetchAll();
+        $resultado = $stm->fetchAll();
 
-        return $this->map($result);
+        $cursos = $this->map($resultado);
+        return $cursos;
     }
 
-    private function map(array $result) {
+    private function map($resultado) {
         $cursos = array();
-        foreach($result as $r) {  
+        foreach($resultado as $r) {
             $curso = new Curso();
-            $curso->setId($r["id"]);
-            $curso->setNome($r["nome"]);
-            $curso->setTurno($r["turno"]);
-
+            $curso->setId($r['id']);
+            $curso->setNome($r['nome']);
+            $curso->setTurno($r['turno']);
 
             array_push($cursos, $curso);
         }
-        return $cursos;
+
+        return $cursos;        
     }
 
 }
