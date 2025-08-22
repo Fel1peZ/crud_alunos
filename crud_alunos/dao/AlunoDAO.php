@@ -77,4 +77,36 @@ class AlunoDAO {
         return $alunos;
     }
 
+    public function alterar(Aluno $aluno){
+         try {
+            $sql = "UPDATE alunos SET nome =?, idade=?, estrangeiro=?, id_curso= ? 
+            WHERE id = ?";
+            $stm = $this->conexao->prepare($sql);
+            $stm->execute([$aluno->getNome(), $aluno->getIdade(), 
+                        $aluno->getEstrangeiro(),
+                        $aluno->getCurso()->getId(),
+                        $aluno->getId()]);
+            return NULL;
+        } catch(PDOException $e) {
+            return $e;
+        }
+    }
+
+    public function excluir($id){
+        try{
+            $sql = "DELETE FROM alunos WHERE id = ?";
+            $stm = $this->conexao->prepare($sql);
+            $stm->execute([$id]);
+            return NULL;
+            
+        }catch(PDOException $e){
+            return $e;
+        }
+
+        
+
+    }
+    
+   
+
 }

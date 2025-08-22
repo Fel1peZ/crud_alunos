@@ -18,7 +18,7 @@
     <a href="inserir.php">Inserir</a>
 </div>
 
-<table border="1">
+<table class="table table-striped">
     <!-- Cabeçalho -->
     <tr>
         <th>ID</th>
@@ -43,7 +43,11 @@
                     <img src="../../img/btn_editar.png" alt="">
                 </a>
             </td>
-            <td></td>
+            <td>
+                <a href="excluir.php?id=<?= $aluno->getId()?>" onclick="confirm('Confirma a exclusão')">
+                    <img src="../../img/btn_excluir.png" alt="">
+                </a>
+            </td>
         </tr>
     <?php endforeach; ?>
 

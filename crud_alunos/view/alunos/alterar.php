@@ -9,6 +9,7 @@
 
     if(isset($_POST['nome'])) {
     //Usuário já clicou no gravar
+        $id          = $_POST['id'];
         $nome        = trim($_POST['nome']) ? trim($_POST['nome']) : NULL;
         $idade       = is_numeric($_POST['idade']) ? $_POST['idade'] : NULL;
         $estrangeiro = trim($_POST['estrang']) ? trim($_POST['estrang']) : NULL;
@@ -16,6 +17,7 @@
 
 
         $aluno = new Aluno();
+        $aluno->setId($id);
         $aluno->setNome($nome);
         $aluno->setIdade($idade);
         $aluno->setEstrangeiro($estrangeiro);
@@ -26,7 +28,17 @@
 
         //chamar o controller
         $alunoCont = new AlunoController();
-        $alunoCont->atualizarRegistro($aluno);
+        $erros = $alunoCont->alterar($aluno);
+
+        if(! $erros){
+            header("location: listar.php");
+        } else{
+
+            $msgErro = implode("<br>",$erros);
+        }
+
+
+        //$alunoCont->atualizarRegistro($aluno);
     }else{
 
     
